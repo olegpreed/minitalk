@@ -6,7 +6,7 @@
 /*   By: preed <preed@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 19:13:35 by preed             #+#    #+#             */
-/*   Updated: 2022/04/06 16:01:54 by preed            ###   ########.fr       */
+/*   Updated: 2022/04/06 19:55:39 by preed            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,21 @@ void	action(int signum, siginfo_t *sig, void *context)
 	{
 		ft_strlcat(p, &a, i++);
 		n = 128;
-		if (a == '\n' || i == 10001)
+		if (a == '\n' || i == 10001 || a == '\0')
 		{
 			write(1, p, ft_strlen(p));
-			// printf("\ni = %d\n", i);
-			// printf("p length = %d\n", ft_strlen(p));
 			free(p);
 			i = 2;
 			p = NULL;
+			if (a == '\0')
+			{
+				kill(sig->si_pid, SIGUSR2);
+				write(1, "\n", 1);
+			}
 		}
 		a = 0;
 	}
+	kill(sig->si_pid, SIGUSR1);
 }
 
 int	main(void)

@@ -6,7 +6,7 @@
 #    By: preed <preed@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/31 18:04:25 by preed             #+#    #+#              #
-#    Updated: 2022/04/05 16:55:07 by preed            ###   ########.fr        #
+#    Updated: 2022/04/06 18:08:59 by preed            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ SERVER   = server
 CLIENT   = client
 
 CC       = gcc
-FLAGS    = -Wall -Wextra -Werror
+FLAGS    = -g -Wall -Wextra -Werror
 
 INC      = includes/
 SRC_DIR  = src/
