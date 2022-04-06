@@ -6,7 +6,7 @@
 #    By: preed <preed@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/31 18:04:25 by preed             #+#    #+#              #
-#    Updated: 2022/04/01 19:57:58 by preed            ###   ########.fr        #
+#    Updated: 2022/04/05 16:55:07 by preed            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,12 +14,14 @@ SERVER   = server
 CLIENT   = client
 
 CC       = gcc
-FLAGS    = -g -Wall -Wextra -Werror
+FLAGS    = -Wall -Wextra -Werror
 
 INC      = includes/
 SRC_DIR  = src/
 OBJ_DIR  = obj/
 LIB_DIR  = libft/
+
+HEADER	 = minitalk.h
 
 LIBFT    = libft/libft.a
 
@@ -41,17 +43,20 @@ makelib:
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 
-$(SERVER): $(OBJ_DIR) $(OBJ_S)
+$(SERVER): $(OBJ_DIR) $(OBJ_S) $(INC)$(HEADER) $(LIBFT)
 	$(CC) $(FLAGS) -o $(SERVER) $(OBJ_S) -I$(INC) $(LIBFT)
 
-$(CLIENT): $(OBJ_DIR) $(OBJ_C)
+$(CLIENT): $(OBJ_DIR) $(OBJ_C) $(INC)$(HEADER) $(LIBFT)
 	$(CC) $(FLAGS) -o $(CLIENT) $(OBJ_C) -I$(INC) $(LIBFT)
 
 clean:
-	rm -rf $(OBJ_DIR)
+	@make -C $(LIB_DIR) clean --no-print-directory
+	rm -rf $(OBJ_DIR) 
 
 fclean: clean
+	@make -C $(LIB_DIR) fclean --no-print-directory
 	rm -rf $(SERVER) $(CLIENT)
 
 re: fclean
+	@make -C $(LIB_DIR) re --no-print-directory
 	make all

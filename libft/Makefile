@@ -6,7 +6,7 @@
 #    By: preed <preed@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/07 20:16:46 by preed             #+#    #+#              #
-#    Updated: 2022/04/01 20:04:20 by preed            ###   ########.fr        #
+#    Updated: 2022/04/05 16:54:06 by preed            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,7 +42,7 @@ CC = gcc
 
 RM = rm -rvf
 
-FLAGS = -g -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror
 
 .PHONY: all clean fclean re bonus
 
@@ -51,10 +51,10 @@ all: $(NAME)
 $(OBJS_DIR):
 	@mkdir -p $@
 
-$(OBJS_DIR)%.o: $(SRCS_DIR)%.c
+$(OBJS_DIR)%.o: $(SRCS_DIR)%.c 
 	$(CC) $(FLAGS) -c $< -o $@ -I$(INC)
 
-$(NAME): $(OBJS_DIR) $(OBJS)
+$(NAME): $(OBJS_DIR) $(OBJS) $(INC)$(HEADER)
 	ar rcs $(NAME) $(OBJS)
 
 bonus: all

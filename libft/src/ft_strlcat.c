@@ -6,7 +6,7 @@
 /*   By: preed <preed@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/11 21:14:50 by preed             #+#    #+#             */
-/*   Updated: 2022/03/23 16:24:01 by preed            ###   ########.fr       */
+/*   Updated: 2022/04/02 19:35:26 by preed            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 	i = 0;
 	j = ft_strlen(dst);
 	h = j;
-	if (dstsize == 0 || j < dstsize)
+	if (dstsize == 0)
 		return (ft_strlen(src));
 	while (j < (dstsize - 1) && src[i])
 	{

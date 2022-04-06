@@ -6,7 +6,7 @@
 /*   By: preed <preed@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 19:13:35 by preed             #+#    #+#             */
-/*   Updated: 2022/04/01 21:00:08 by preed            ###   ########.fr       */
+/*   Updated: 2022/04/06 16:01:54 by preed            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,27 +15,34 @@
 void	action(int signum, siginfo_t *sig, void *context)
 {
 	static int	n = 128;
-	static char	a = 0;
+	static char	a;
+	static char	*p = NULL;
+	static int	i = 2;
 
 	(void)sig;
 	(void)context;
+	if (!p)
+		p = ft_calloc(10000, sizeof(char));
+	if (!p)
+		return ;
+	if (signum == SIGUSR2)
+		a = a | n;
+	n = n / 2;
 	if (n == 0)
 	{
-		write(1, "\n", 1);
-		n = 64;
+		ft_strlcat(p, &a, i++);
+		n = 128;
+		if (a == '\n' || i == 10001)
+		{
+			write(1, p, ft_strlen(p));
+			// printf("\ni = %d\n", i);
+			// printf("p length = %d\n", ft_strlen(p));
+			free(p);
+			i = 2;
+			p = NULL;
+		}
 		a = 0;
 	}
-	if (signum == SIGUSR2)
-	{
-		write(1, "1", 1);
-		a = a | n;
-	}
-	else if (signum == SIGUSR1)
-	{
-		write(1, "0", 1);
-		a = a | 0;
-	}
-	n /= 2;
 }
 
 int	main(void)

@@ -6,15 +6,15 @@
 /*   By: preed <preed@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/11 18:01:10 by preed             #+#    #+#             */
-/*   Updated: 2022/04/01 18:36:12 by preed            ###   ########.fr       */
+/*   Updated: 2022/04/05 16:24:56 by preed            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static LLI	ft_putnbr(const char *str, int i)
+static t_lli	ft_putnbr(const char *str, int i)
 {
-	LLI	num;
+	t_lli	num;
 
 	num = 0;
 	while (str[i] >= '0' && str[i] <= '9')
@@ -29,11 +29,11 @@ static LLI	ft_putnbr(const char *str, int i)
 // INT_MAX < number <= LLONG_MAX 	overflow
 // LLONG_MAX < number				-1
 // number < LLONG_MIN				0
-LLI	ft_atoi(const char *str)
+t_lli	ft_atoi(const char *str)
 {
-	int				i;
-	LLI	e;
-	LLI	k;
+	int		i;
+	t_lli	e;
+	t_lli	k;
 
 	i = 0;
 	e = 1;
