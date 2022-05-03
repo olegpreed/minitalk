@@ -6,11 +6,13 @@
 /*   By: preed <preed@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 18:35:30 by preed             #+#    #+#             */
-/*   Updated: 2022/04/06 20:10:20 by preed            ###   ########.fr       */
+/*   Updated: 2022/05/03 17:49:13 by preed            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
+
+int	reciever;
 
 void	char_to_bits(char sign, int pid)
 {
@@ -19,12 +21,14 @@ void	char_to_bits(char sign, int pid)
 	n = 128;
 	while (n > 0)
 	{
+		reciever = 0;
 		if ((sign & n) > 0)
 			kill(pid, SIGUSR2);
 		else
 			kill(pid, SIGUSR1);
 		n /= 2;
-		pause();
+		while (!reciever)
+			;
 	}
 }
 
@@ -59,6 +63,7 @@ void	listen(int signum, siginfo_t *sig, void *context)
 		i++;
 	else
 		printf("All %d chars have been transferred! No one got hurt!", i / 8);
+	reciever = 1;
 }
 
 int	main(int argc, char **argv)
@@ -66,6 +71,7 @@ int	main(int argc, char **argv)
 	int					pid;
 	struct sigaction	sigac;
 
+	reciever = 1;
 	pid = 0;
 	sigac.sa_flags = SA_SIGINFO;
 	sigac.sa_sigaction = listen;
