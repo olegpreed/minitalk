@@ -6,7 +6,7 @@
 /*   By: preed <preed@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 18:35:30 by preed             #+#    #+#             */
-/*   Updated: 2022/05/04 15:18:14 by preed            ###   ########.fr       */
+/*   Updated: 2022/05/04 17:49:09 by preed            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,14 @@ void	char_to_bits(char sign, int pid)
 	{
 		reciever = 0;
 		if ((sign & n) > 0)
-			kill(pid, SIGUSR2);
+			if (kill(pid, SIGUSR2) == -1)
+				write(1, "KillError!\n", 11);
 		else
-			kill(pid, SIGUSR1);
+			if (kill(pid, SIGUSR1) == -1)
+				write(1, "KillError!\n", 11);
 		n /= 2;
-		usleep(100000);
+		while (!reciever)
+			;
 	}
 }
 
@@ -49,19 +52,15 @@ int	check(char *argv, int *pid_p)
 	if (num > 2147483647 || num <= 0)
 		return (0);
 	*pid_p = num;
-	return (*pid_p);
+	return (1);
 }
 
 void	listen(int signum, siginfo_t *sig, void *context)
 {
-	static int	i;
-
 	(void)sig;
 	(void)context;
-	if (signum == SIGUSR1)
-		i++;
-	else
-		printf("All %d chars have been transferred! No one got hurt!", i / 8);
+	if (signum == SIGUSR2)
+		write(1, "Great success!\n", 15);
 	reciever = 1;
 }
 
@@ -74,10 +73,12 @@ int	main(int argc, char **argv)
 	pid = 0;
 	sigac.sa_flags = SA_SIGINFO;
 	sigac.sa_sigaction = listen;
-	if (sigaction(SIGUSR1, &sigac, NULL) < 0)
+	if ((sigaction(SIGUSR1, &sigac, NULL) == -1)
+		|| (sigaction(SIGUSR2, &sigac, NULL) == -1))
+	{
+		write(1, "Sigerror!\n", 10);
 		return (0);
-	if (sigaction(SIGUSR2, &sigac, NULL) < 0)
-		return (0);
+	}
 	if (argc == 3 && check(argv[1], &pid))
 		send_nudes(pid, argv[2]);
 	return (0);
