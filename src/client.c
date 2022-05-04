@@ -6,13 +6,13 @@
 /*   By: preed <preed@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 18:35:30 by preed             #+#    #+#             */
-/*   Updated: 2022/05/03 17:49:13 by preed            ###   ########.fr       */
+/*   Updated: 2022/05/04 15:18:14 by preed            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-int	reciever;
+volatile	sig_atomic_t	reciever;
 
 void	char_to_bits(char sign, int pid)
 {
@@ -27,8 +27,7 @@ void	char_to_bits(char sign, int pid)
 		else
 			kill(pid, SIGUSR1);
 		n /= 2;
-		while (!reciever)
-			;
+		usleep(100000);
 	}
 }
 
@@ -75,8 +74,10 @@ int	main(int argc, char **argv)
 	pid = 0;
 	sigac.sa_flags = SA_SIGINFO;
 	sigac.sa_sigaction = listen;
-	sigaction(SIGUSR1, &sigac, NULL);
-	sigaction(SIGUSR2, &sigac, NULL);
+	if (sigaction(SIGUSR1, &sigac, NULL) < 0)
+		return (0);
+	if (sigaction(SIGUSR2, &sigac, NULL) < 0)
+		return (0);
 	if (argc == 3 && check(argv[1], &pid))
 		send_nudes(pid, argv[2]);
 	return (0);
