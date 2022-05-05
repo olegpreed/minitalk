@@ -6,13 +6,13 @@
 /*   By: preed <preed@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 19:13:35 by preed             #+#    #+#             */
-/*   Updated: 2022/05/04 17:56:20 by preed            ###   ########.fr       */
+/*   Updated: 2022/05/05 18:33:37 by preed            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-volatile	sig_atomic_t	reciever[2];
+volatile sig_atomic_t	g_reciever[2];
 
 void	this_is_the_end(siginfo_t *sig)
 {
@@ -54,8 +54,8 @@ void	action(int signum, siginfo_t *sig, void *context)
 			print_saved(&p, a, sig, &i);
 		a = 0;
 	}
-	reciever[0] = 1;
-	reciever[1] = sig->si_pid;
+	g_reciever[0] = 1;
+	g_reciever[1] = sig->si_pid;
 }
 
 int	main(void)
@@ -78,10 +78,10 @@ int	main(void)
 	}
 	while (1)
 	{
-		while (!reciever[0])
+		while (!g_reciever[0])
 			;
-		reciever[0] = 0;
-		if (kill(reciever[1], SIGUSR1) == -1)
+		g_reciever[0] = 0;
+		if (kill(g_reciever[1], SIGUSR1) == -1)
 			write(1, "KillError!\n", 11);
 	}
 	return (0);
